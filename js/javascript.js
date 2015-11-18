@@ -81,7 +81,7 @@ window.onload = function() {
     
     // Módosítások figyelése.
     var re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    var checkEmail = function() {
+    window.checkEmail = function() {
         
         var style = !re.test(email.value) ? "block" : "none";
         email.parentNode.querySelector( ".error-message" ).style.display = style;
@@ -130,8 +130,9 @@ function getRemoteContent() {
     req.open( "get", "json/products.json" );
     
     // Ha kész.
-    req.onload = function() {
+    req.onload = function() {  
         var data = JSON.parse( this.response );
+        window.productList = new products( data );
         console.log( data );        
     };
     
@@ -139,6 +140,44 @@ function getRemoteContent() {
     req.send();
     
 }
+
+// Termékek kezelése.
+var products = function( products ) {
+    
+    // Konstruktor.
+    this.construct = function() {
+        this.products = products;
+    };
+    
+    // Keresés.
+    this.find = function( key, value ) {
+        var results = [];
+        for ( var k in this.products ) {
+            if ( this.products[k][key] == value ) {
+                results.push( this.products[k] );                
+            }
+        }
+        return results;
+    };
+    
+    this.construct();
+    
+    
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
