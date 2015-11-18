@@ -27,13 +27,17 @@ function handlePost( req, res ) {
     
 }
 
+function handleGet( req, res ) {
+    writeResponse( req, res );
+}
+
 var app = http.createServer( function( req, res ) {
     
     // Kérések kezelése.
-    switch( req.method ) {
-        case "POST": handlePost( req, res );
+    switch( req.method.toLowerCase() ) {
+        case "post": handlePost( req, res );
             break;
-        case "GET": handleGet( req, res );
+        case "get": handleGet( req, res );
             break;
         default: 
             writeResponse( req, res );

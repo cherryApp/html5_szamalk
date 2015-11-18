@@ -202,6 +202,7 @@ var products = function( products ) {
     this.postDataToTheServer = function() {
         console.log( this );
         
+        /*
         var req = new XMLHttpRequest();
         req.open( "post", "http://127.0.0.1:3333" );
         req.onload = function() {
@@ -211,6 +212,11 @@ var products = function( products ) {
             console.error( req.response );
         }
         req.send( JSON.stringify(this.products) );
+        */
+        
+        $.post( "http://127.0.0.1:3333", JSON.stringify(this.products), function(data) {
+            console.log( data ); 
+        });
         
         
     };
