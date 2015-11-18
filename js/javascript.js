@@ -146,18 +146,151 @@ var products = function( products ) {
     
     // Konstruktor.
     this.construct = function() {
+        
+        // Elemek keresése.
+        this.searchInput = document.querySelector( "#search-input" );
+        this.searchButton = document.querySelector( "#search-button" );
+        this.saveButton = document.querySelector( "#save-button" );
+        this.tbody = document.querySelector( "#product-table tbody" );
+        
         this.products = products;
+        this.fillTable();
+        this.setEvents();
+        
+    };
+    
+    // Eseménykezelők.
+    this.setEvents = function() {
+        
+        // Keresés indítása.
+        var self = this;
+        this.searchButton.addEventListener( "click", function() {
+            self.filterTable();
+        }, false );
+        
+        // Mentés.
+        this.saveButton.addEventListener( "click", function() {
+            self.postDataToTheServer();
+        }, false );
+        
+    };
+    
+    // Input mezők módosításának figyelése.
+    this.watchInputs = function() {
+        
+        // Input mezők kiválasztása.
+        var self = this;        
+        var inputs = this.tbody.querySelectorAll( "input" );
+        
+        Array.prototype.forEach.call( inputs, function( input ) {
+            input.addEventListener( "change", function() {
+                self.changeProducts( this ); 
+            });
+        });
+        
+    };
+    
+    // Adatok visszaírása a products tömbbe.
+    this.changeProducts = function( input ) {
+        console.log( input.value );
+        var id = input.getAttribute( "data-id" ),
+            key = input.getAttribute( "data-key" );
+        this.find( "id", id )[key] = input.value;
+    };
+    
+    // Adatok küldése a szerverre.
+    this.postDataToTheServer = function() {
+        console.log( this );
+        
+        var req = new XMLHttpRequest();
+        req.open( "post", "http://127.0.0.1:3333" );
+        req.onload = function() {
+            console.log( req.response );
+        }
+        req.onerror = function() {
+            console.error( req.response );
+        }
+        req.send( JSON.stringify(this.products) );
+        
+        
+    };
+    
+    // Táblázat szűrése.
+    this.filterTable = function() {
+        
+        console.log( this );
+        
+        var phrase = this.searchInput.value,
+            records = [];
+        
+        // Ellenőrzés.
+        if ( phrase.length < 1 ) {
+            records = this.products;
+        } else {
+            records = this.findAll( phrase );
+        }
+        
+        // Újrageneráljuk a táblázatot.
+        this.fillTable( records );
+        
     };
     
     // Keresés.
     this.find = function( key, value ) {
-        var results = [];
         for ( var k in this.products ) {
             if ( this.products[k][key] == value ) {
+                return this.products[k];            
+            }
+        }
+        return -1;
+    };
+    
+    // Keresés.
+    this.findAll = function( value ) {
+        var results = [];
+        for ( var k in this.products ) {
+            if ( this.joinRecord( this.products[k] ).indexOf( value ) !== -1 ) {
                 results.push( this.products[k] );                
             }
         }
         return results;
+    };
+    
+    // Rekord egyesítése.
+    this.joinRecord = function( record ) {
+        var joined = "";
+        for ( var k in record ) {
+            joined += "|"+record[k];
+        }
+        return joined;
+    };
+    
+    // Táblázat generálása.
+    this.fillTable = function( records ) {
+        
+        records = records || this.products;
+        
+        // Adatsorok beszúrása.
+        this.tbody.innerHTML = "";
+        for ( var k in records ) {
+            var tr = document.createElement( "tr" );
+            this.tbody.appendChild( tr );
+            this.createCells( tr, records[k] );
+        }
+        
+        this.watchInputs();
+        
+    };
+    
+    // Cellák generálása.
+    this.createCells = function( tr, row ) {
+        for ( var k in row ) {
+            var td = document.createElement( "td" );
+            td.innerHTML = '<input data-id="'+row.id+'" data-key="'+k
+                            +'" class="form-control" type="text" value="'+row[k]
+                            +'">';
+            tr.appendChild( td );
+        }
     };
     
     this.construct();
