@@ -64,6 +64,7 @@
 }
 .test-img {
     position: absolute;
+    font-size: 20px;
     top: 0;
     left: 10px;
     width: 320px;

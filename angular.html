@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="" data-ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>AngularJS példák</title>
+    <link rel="shortcut icon" href="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <style>body{padding-top:50px;}.starter-template{padding:40px 15px;text-align:center;}</style>
+
+    <!--[if IE]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Project name</a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div><!--.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row" data-ng-controller="testCtrl">
+            <div class="col-xs-3 col-xs-offset-4">
+                <input type="number" data-ng-model="szam">
+                <br>
+                <h3>Eredmény <span data-ng-bind="calc() | currencyFilter:'GBP'"></span>!</h3>
+            </div>
+        </div>
+        
+        <div class="row" data-ng-controller="tableCtrl">
+            <div class="col-xs-3">
+                <button data-ng-click="saveTable()" class="btn btn-primary">mentés</button>
+            </div>
+            <div class="col-xs-12">
+                <table id="product-table" class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Megnevezés</th>
+                      <th>Ár</th>
+                      <th>Készlet</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-ng-repeat="row in products">
+                        <td>{{ row.id }}</td>  
+                        <td>
+                            <input data-ng-model="row.name">
+                        </td>
+                        <td>
+                            <input data-ng-model="row.price">
+                        </td> 
+                        <td>
+                            <input data-ng-model="row.quantity">
+                        </td> 
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/currencyFilter.js"></script>
+</body>
+</html>

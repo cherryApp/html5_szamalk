@@ -1,12 +1,13 @@
 // 
 var http = require( "http" ),
-    fs = require( "fs" );
+    fs = require( "fs" ),
+    url = require( "url" );
 
 // Válasz adása.
 function writeResponse( req, res, content ) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-xsrf-token');
     res.end( content || "Hello, én vagyok a szerver" );
 }
 
@@ -28,7 +29,28 @@ function handlePost( req, res ) {
 }
 
 function handleGet( req, res ) {
-    writeResponse( req, res );
+    
+    // Url paraméterek.
+    var urlParams = getQuery( req.url );
+    
+    // Fájl beolvasása.
+    var jsonFile = fs.readFileSync('products.json', 'utf8');
+    jsonFile = JSON.parse( jsonFile );
+    
+    var record = [];
+    for ( var k in jsonFile ) {
+        if( jsonFile[k].id == urlParams.id ) {
+            record.push( jsonFile[k] );
+        }
+    }
+    console.log( jsonFile );
+    writeResponse( req, res, JSON.stringify(record) );
+    
+}
+
+// Query paraméterek olvasása.
+function getQuery( _url ) {
+    return url.parse(_url, true).query;
 }
 
 var app = http.createServer( function( req, res ) {
