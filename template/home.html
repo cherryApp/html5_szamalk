@@ -1,0 +1,39 @@
+<div class="row" data-ng-controller="testCtrl">
+    <div class="col-xs-3 col-xs-offset-4">
+        <input type="number" data-ng-model="szam">
+        <br>
+        <h3>Eredmény <span data-ng-bind="calc() | currencyFilter:'GBP'"></span>!</h3>
+    </div>
+</div>
+
+<div class="row" data-ng-controller="tableCtrl">
+    <div class="col-xs-3">
+        <button data-ng-click="saveTable()" class="btn btn-primary">mentés</button>
+    </div>
+    <div class="col-xs-12">
+        <table id="product-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Megnevezés</th>
+              <th>Ár</th>
+              <th>Készlet</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-ng-repeat="row in products">
+                <td>{{ row.id }}</td>  
+                <td>
+                    <input data-ng-model="row.name">
+                </td>
+                <td>
+                    <input data-ng-model="row.price">
+                </td> 
+                <td>
+                    <input data-ng-model="row.quantity">
+                </td> 
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
