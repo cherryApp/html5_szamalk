@@ -69,5 +69,36 @@ var app = http.createServer( function( req, res ) {
     
 } ).listen( "3333" );
 
+// Socket io. ----------------------------------------
+var io = require('socket.io')(app);
+io.on('connection', function (socket) {
+    
+    socket.on( "message_from_client", function(data) {
+        console.log( "client: ", socket.id );
+        console.log( "message: ", data );
+        
+        // Terített üzenet.
+        var messageData = {
+            "sender": socket.id,
+            "message": data
+        };
+        
+        // Terítjük az üzenetet.
+        socket.broadcast.emit( "message_from_server", data );
+        
+        
+    });
+    
+    
+    
+});
+
+
+
+
+
+
+
+
 
 console.log( "Server run in 3333 port." );
